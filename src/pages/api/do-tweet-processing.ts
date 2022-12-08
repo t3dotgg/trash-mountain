@@ -45,7 +45,7 @@ const doTweetProcessing = async (req: NextApiRequest, res: NextApiResponse) => {
     return sendTweetToDiscord(tweet);
   });
 
-  Promise.allSettled(discordWebhookCalls);
+  await Promise.allSettled(discordWebhookCalls);
 
   return res.status(200).json(goodTrashTweets);
 };
