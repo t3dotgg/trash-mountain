@@ -26,6 +26,8 @@ export const serverSchema = z.object({
   TWITTER_API_KEY: z.string(),
   TWITTER_API_SECRET: z.string(),
   TWITTER_API_BEARER_TOKEN: z.string(),
+
+  CRON_TOKEN: z.string(),
 });
 
 /**
