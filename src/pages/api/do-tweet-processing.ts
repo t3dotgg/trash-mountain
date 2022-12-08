@@ -2,6 +2,7 @@ import type { inferAsyncReturnType } from "@trpc/server";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { env } from "../../env/server.mjs";
 import { getRecentTrashTweets } from "../../server/twitter";
+import { verifySignature } from "@upstash/qstash/nextjs";
 
 const sendTweetToDiscord = async (
   tweet: NonNullable<
@@ -24,12 +25,12 @@ const sendTweetToDiscord = async (
 };
 
 const doTweetProcessing = async (req: NextApiRequest, res: NextApiResponse) => {
-  const tokenFromRequest = req.headers.authorization;
+  // const tokenFromRequest = req.headers.authorization;
 
-  if (tokenFromRequest !== env.CRON_TOKEN) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
+  // if (tokenFromRequest !== env.CRON_TOKEN) {
+  //   res.status(401).json({ error: "Unauthorized" });
+  //   return;
+  // }
 
   const recentTweets = await getRecentTrashTweets();
 
@@ -49,4 +50,10 @@ const doTweetProcessing = async (req: NextApiRequest, res: NextApiResponse) => {
   return res.status(200).json(goodTrashTweets);
 };
 
-export default doTweetProcessing;
+export default verifySignature(doTweetProcessing);
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
