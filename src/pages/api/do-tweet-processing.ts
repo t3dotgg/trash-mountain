@@ -24,14 +24,14 @@ const sendTweetToDiscord = async (
 };
 
 const doTweetProcessing = async (req: NextApiRequest, res: NextApiResponse) => {
-  const recentTweets = await getRecentTrashTweets();
-
   const tokenFromRequest = req.headers.authorization;
 
   if (tokenFromRequest !== env.CRON_TOKEN) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
+
+  const recentTweets = await getRecentTrashTweets();
 
   const goodTrashTweets =
     recentTweets?.data?.filter(
